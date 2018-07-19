@@ -139,6 +139,18 @@ void ScaleLayer<Dtype>::Forward_cpu(
   if (bias_layer_) {
     bias_layer_->Forward(bias_bottom_vec_, top);
   }
+/*
+  LOG(INFO) << "output_scale = ";
+  for (int i = 0; i < top[0]->num(); ++i){
+       for (int j = 0; j < top[0]->channels(); ++j) {
+            for (int u = 0; u < top[0]->height(); ++u) {
+                 for (int v = 0; v < top[0]->width(); ++v) {
+                     LOG(INFO) << top[0]->data_at(i, j, u, v) << ",";
+                 }
+            }
+       }
+  }
+*/
 }
 
 template <typename Dtype>

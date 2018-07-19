@@ -124,6 +124,35 @@ void BasePrefetchingDataLayer<Dtype>::Forward_cpu(
     top[1]->ReshapeLike(prefetch_current_->label_);
     top[1]->set_cpu_data(prefetch_current_->label_.mutable_cpu_data());
   }
+
+ // std::cout << "------transform_bottom_size =" << bottom.size() << std::endl;
+ // std::cout << "------transform_top_size =" << top.size() << std::endl;
+ /* 
+   std::cout << "input_transform1 = " << std::endl;
+   for (int i = 0; i < bottom[0]->num(); ++i){
+       for (int j = 0; j < bottom[0]->channels(); ++j) {
+           for (int u = 0; u < bottom[0]->height(); ++u) {
+               for (int v = 0; v < bottom[0]->width(); ++v) {
+                   std::cout << bottom[0]->data_at(i, j, u, v) << ",";
+               }
+               std::cout << " " << std::endl;
+           }
+       }
+    }
+ */
+/*  
+    std::cout << "output_transform1 = " << std::endl;
+    for (int i = 0; i < top[0]->num(); ++i){
+        for (int j = 0; j < top[0]->channels(); ++j) {
+            for (int u = 0; u < top[0]->height(); ++u) {
+                for (int v = 0; v < top[0]->width(); ++v) {
+                    std::cout << top[0]->data_at(i, j, u, v) << ",";
+                }
+                std::cout << " " << std::endl;
+             }
+        }
+     }
+  */   
 }
 
 #ifdef CPU_ONLY

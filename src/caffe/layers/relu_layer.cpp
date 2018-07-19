@@ -16,6 +16,18 @@ void ReLULayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     top_data[i] = std::max(bottom_data[i], Dtype(0))
         + negative_slope * std::min(bottom_data[i], Dtype(0));
   }
+ /*
+  LOG(INFO) << "relu = " << std::endl;
+  for (int i = 0; i < top[0]->num(); ++i){
+       for (int j = 0; j < top[0]->channels(); ++j) {
+            for (int u = 0; u < top[0]->height(); ++u) {
+                 for (int v = 0; v < top[0]->width(); ++v) {
+                      LOG(INFO) << top[0]->data_at(i, j, u, v) << ",";
+                 }
+            }
+       }
+  }
+ */
 }
 
 template <typename Dtype>

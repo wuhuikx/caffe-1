@@ -224,6 +224,30 @@ void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   default:
     LOG(FATAL) << "Unknown pooling method.";
   }
+/*
+  LOG(INFO) << "input_pooling = " << std::endl;
+  for (int i = 0; i < bottom[0]->num(); ++i){
+       for (int j = 0; j < bottom[0]->channels(); ++j) {
+           for (int u = 0; u < bottom[0]->height(); ++u) {
+                for (int v = 0; v < bottom[0]->width(); ++v) {
+                     LOG(INFO) << bottom[0]->data_at(i, j, u, v) << ",";
+                }
+           }
+      }
+  }
+*/
+  /*
+  LOG(INFO) << "output_pooling = " << std::endl;
+  for (int i = 0; i < top[0]->num(); ++i){
+       for (int j = 0; j < top[0]->channels(); ++j) {
+           for (int u = 0; u < top[0]->height(); ++u) {
+                for (int v = 0; v < top[0]->width(); ++v) {
+                     LOG(INFO) << top[0]->data_at(i, j, u, v) << ",";
+                }
+           }
+      }
+  }
+*/
 }
 
 template <typename Dtype>

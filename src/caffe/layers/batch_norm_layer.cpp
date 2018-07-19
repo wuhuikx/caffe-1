@@ -163,6 +163,18 @@ void BatchNormLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   //                 might clobber the data.  Can we skip this if they won't?
   caffe_copy(x_norm_.count(), top_data,
       x_norm_.mutable_cpu_data());
+  /*
+  LOG(INFO) << "output_bn = ";
+  for (int i = 0; i < top[0]->num(); ++i){
+       for (int j = 0; j < top[0]->channels(); ++j) {
+            for (int u = 0; u < top[0]->height(); ++u) {
+                 for (int v = 0; v < top[0]->width(); ++v) {
+                      LOG(INFO) << top[0]->data_at(i, j, u, v) << ",";
+                 }
+           }
+       }
+  }*/
+
 }
 
 template <typename Dtype>

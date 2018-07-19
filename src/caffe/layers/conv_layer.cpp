@@ -37,6 +37,46 @@ void ConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       }
     }
   }
+/*
+  LOG(INFO) << "input_conv = ";
+  for (int i = 0; i < bottom[0]->num(); ++i){
+      for (int j = 0; j < bottom[0]->channels(); ++j) {
+          for (int u = 0; u < bottom[0]->height(); ++u) {
+              for (int v = 0; v < bottom[0]->width(); ++v) {
+                  LOG(INFO) << bottom[0]->data_at(i, j, u, v) << ",";
+              }
+          }
+      }
+  }
+
+  LOG(INFO) << "weight_shape = " 
+      << this->blobs_[0]->num() << ","
+      << this->blobs_[0]->channels() << ","
+      << this->blobs_[0]->height() << ","
+      << this->blobs_[0]->width();
+
+  LOG(INFO) << "weight_conv = ";
+  for (int i = 0; i < this->blobs_[0]->num(); ++i){
+      for (int j = 0; j < this->blobs_[0]->channels(); ++j) {
+          for (int u = 0; u < this->blobs_[0]->height(); ++u) {
+              for (int v = 0; v < this->blobs_[0]->width(); ++v) {
+                  LOG(INFO) << this->blobs_[0]->data_at(i, j, u, v) << ",";
+              }
+          }
+      }
+  }
+
+  LOG(INFO) << "output_conv = ";
+  for (int i = 0; i < top[0]->num(); ++i){
+      for (int j = 0; j < top[0]->channels(); ++j) {
+          for (int u = 0; u < top[0]->height(); ++u) {
+              for (int v = 0; v < top[0]->width(); ++v) {
+                  LOG(INFO) << top[0]->data_at(i, j, u, v) << ",";
+              }
+          }
+      }
+  }
+*/
 }
 
 template <typename Dtype>

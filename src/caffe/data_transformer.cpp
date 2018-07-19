@@ -41,6 +41,7 @@ DataTransformer<Dtype>::DataTransformer(const TransformationParameter& param,
 template<typename Dtype>
 void DataTransformer<Dtype>::Transform(const Datum& datum,
                                        Dtype* transformed_data) {
+  //std::cout << "------------Transform1 " << std::endl;
   const string& data = datum.data();
   const int datum_channels = datum.channels();
   const int datum_height = datum.height();
@@ -52,6 +53,57 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
   const bool has_mean_file = param_.has_mean_file();
   const bool has_uint8 = data.size() > 0;
   const bool has_mean_values = mean_values_.size() > 0;
+  /*
+    std::cout << "------------crop_size = " << crop_size << std::endl;
+    std::cout << "------------scale = " << scale << std::endl;
+    std::cout << "------------do_mirror = " << do_mirror << std::endl;
+    std::cout << "------------has_mean_file = " << has_mean_file << std::endl;
+    std::cout << "------------has_uint8 = " << has_uint8 << std::endl;
+    std::cout << "------------has_mean_values = " << has_mean_values << std::endl;
+  */
+  Dtype datum_element1;
+  
+  /*for (int c = 0; c < 3; ++c) {
+      int data_index = (c * datum_height + 0) * datum_width + 0;
+        if (has_uint8) {
+          datum_element1 =
+            static_cast<Dtype>(static_cast<uint8_t>(data[data_index]));
+        } else {
+          datum_element1 = datum.float_data(data_index);
+        }
+      std::cout << "cv_pixel0 = " << datum_element1 <<std::endl;
+  }
+  for (int c = 0; c < 3; ++c) {
+      int data_index = (c * datum_height + 1) * datum_width + 1;
+        if (has_uint8) {
+          datum_element1 =
+            static_cast<Dtype>(static_cast<uint8_t>(data[data_index]));
+        } else {
+          datum_element1 = datum.float_data(data_index);
+        }
+      std::cout << "cv_pixel1 = " << datum_element1 <<std::endl;
+  }
+  for (int c = 0; c < 3; ++c) {
+      int data_index = (c * datum_height +  2) * datum_width + 2;
+        if (has_uint8) {
+          datum_element1 =
+            static_cast<Dtype>(static_cast<uint8_t>(data[data_index]));
+        } else {
+          datum_element1 = datum.float_data(data_index);
+        }
+      std::cout << "cv_pixel2 = " << datum_element1 <<std::endl;
+  }
+
+  for (int c = 0; c < 3; ++c) {
+      int data_index = (c * datum_height +  3) * datum_width + 3;
+        if (has_uint8) {
+          datum_element1 =
+            static_cast<Dtype>(static_cast<uint8_t>(data[data_index]));
+        } else {
+          datum_element1 = datum.float_data(data_index);
+        }
+      std::cout << "cv_pixel3 = " << datum_element1 <<std::endl;
+  }*/
 
   CHECK_GT(datum_channels, 0);
   CHECK_GE(datum_height, crop_size);
@@ -124,12 +176,16 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
       }
     }
   }
+  
+
+
 }
 
 
 template<typename Dtype>
 void DataTransformer<Dtype>::Transform(const Datum& datum,
                                        Blob<Dtype>* transformed_blob) {
+  //  std::cout << "------------Transform2 " << std::endl;
   // If datum is encoded, decode and transform the cv::image.
   if (datum.encoded()) {
 #ifdef USE_OPENCV
@@ -143,6 +199,7 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
       cv_img = DecodeDatumToCVMatNative(datum);
     }
     // Transform the cv::image into blob.
+    // std::cout << "------------Transform2-0 " << std::endl;
     return Transform(cv_img, transformed_blob);
 #else
     LOG(FATAL) << "Encoded datum requires OpenCV; compile with USE_OPENCV.";
@@ -153,6 +210,7 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
     }
   }
 
+  //std::cout << "------------Transform2-1 " << std::endl;
   const int crop_size = param_.crop_size();
   const int datum_channels = datum.channels();
   const int datum_height = datum.height();
@@ -225,10 +283,21 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
 template<typename Dtype>
 void DataTransformer<Dtype>::Transform(const cv::Mat& cv_img,
                                        Blob<Dtype>* transformed_blob) {
+  //std::cout << "------------Transform3 " << std::endl;
   const int crop_size = param_.crop_size();
   const int img_channels = cv_img.channels();
   const int img_height = cv_img.rows;
   const int img_width = cv_img.cols;
+  /*
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel0= " << cv_img.at<cv::Vec3b>(0, 0);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel1= " << cv_img.at<cv::Vec3b>(1, 1);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel2= " << cv_img.at<cv::Vec3b>(2, 2);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel3= " << cv_img.at<cv::Vec3b>(3, 3);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel4= " << cv_img.at<cv::Vec3b>(4, 4);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel5= " << cv_img.at<cv::Vec3b>(5, 5);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel6= " << cv_img.at<cv::Vec3b>(6, 6);
+  LOG_IF(INFO, Caffe::root_solver()) << "cv_pixel7= " << cv_img.at<cv::Vec3b>(7, 7);
+  std::cout << "cv_img = " << cv_img << std::endl;*/
 
   // Check dimensions.
   const int channels = transformed_blob->channels();
@@ -247,6 +316,12 @@ void DataTransformer<Dtype>::Transform(const cv::Mat& cv_img,
   const bool do_mirror = param_.mirror() && Rand(2);
   const bool has_mean_file = param_.has_mean_file();
   const bool has_mean_values = mean_values_.size() > 0;
+  /*
+  std::cout << "-----------scale = " << scale << std::endl;
+  std::cout << "-----------do_mirror = " << do_mirror << std::endl;
+  std::cout << "-----------has_mean_file = " << has_mean_file << std::endl;
+  std::cout << "-----------s_mean_values = " << has_mean_values << std::endl;
+  */
 
   CHECK_GT(img_channels, 0);
   CHECK_GE(img_height, crop_size);
@@ -258,6 +333,7 @@ void DataTransformer<Dtype>::Transform(const cv::Mat& cv_img,
     CHECK_EQ(img_height, data_mean_.height());
     CHECK_EQ(img_width, data_mean_.width());
     mean = data_mean_.mutable_cpu_data();
+    //std::cout << "-----------mean_values = " << mean << std::endl;
   }
   if (has_mean_values) {
     CHECK(mean_values_.size() == 1 || mean_values_.size() == img_channels) <<
@@ -266,10 +342,16 @@ void DataTransformer<Dtype>::Transform(const cv::Mat& cv_img,
       // Replicate the mean_value for simplicity
       for (int c = 1; c < img_channels; ++c) {
         mean_values_.push_back(mean_values_[0]);
+        //std::cout << "-----------mean_values = " << mean_values_[0] << std::endl;
       }
     }
   }
 
+  //std::cout << "crop_size = " << crop_size << std::endl;
+  //for (int i = 0; i < mean_values_.size(); ++i)
+      //std::cout << "-----------mean_values = " << mean_values_[i] << std::endl;
+
+  //std::cout << "-----Mat = " << cv_img << std::endl;
   int h_off = 0;
   int w_off = 0;
   cv::Mat cv_cropped_img = cv_img;
@@ -322,6 +404,31 @@ void DataTransformer<Dtype>::Transform(const cv::Mat& cv_img,
       }
     }
   }
+/*
+ std::cout << "input_transform = " << std::endl;
+ for (int i = 0; i < input_blob->num(); ++i){
+     for (int j = 0; j < input_blob->channels(); ++j) {
+         for (int u = 0; u < input_blob->height(); ++u) {
+             for (int v = 0; v < input_blob->width(); ++v) {
+                  std::cout << input_blob->data_at(i, j, u, v) << ",";
+             }
+             std::cout << " " << std::endl;
+         }
+     }
+  }*/
+  /*LOG(INFO) << "output_transform = " << std::endl;
+  for (int i = 0; i < transformed_blob->num(); ++i){
+      for (int j = 0; j < transformed_blob->channels(); ++j) {
+          for (int u = 0; u < transformed_blob->height(); ++u) {
+              for (int v = 0; v < transformed_blob->width(); ++v) {
+                   LOG(INFO) << transformed_blob->data_at(i, j, u, v) << ",";
+              }
+              LOG(INFO) << " ";
+          }
+      }
+   }
+*/
+
 }
 #endif  // USE_OPENCV
 
@@ -362,6 +469,13 @@ void DataTransformer<Dtype>::Transform(Blob<Dtype>* input_blob,
   const bool has_mean_file = param_.has_mean_file();
   const bool has_mean_values = mean_values_.size() > 0;
 
+  /*
+  std::cout << "---------scale = " << scale << std::endl;
+  std::cout << "---------do_mirror = " << do_mirror << std::endl;
+  std::cout << "---------has_mean_file = " << has_mean_file << std::endl;
+  std::cout << "---------has_mean_values = " << has_mean_values << std::endl;
+  std::cout << "---------crop_size = " << crop_size << std::endl;
+*/
   int h_off = 0;
   int w_off = 0;
   if (crop_size) {
@@ -433,9 +547,34 @@ void DataTransformer<Dtype>::Transform(Blob<Dtype>* input_blob,
     }
   }
   if (scale != Dtype(1)) {
-    DLOG(INFO) << "Scale: " << scale;
+    //DLOG(INFO) << "Scale: " << scale;
     caffe_scal(size, scale, transformed_data);
   }
+/*
+ std::cout << "input_transform = " << std::endl;
+ for (int i = 0; i < input_blob->num(); ++i){
+     for (int j = 0; j < input_blob->channels(); ++j) {
+         for (int u = 0; u < input_blob->height(); ++u) {
+             for (int v = 0; v < input_blob->width(); ++v) {
+                  std::cout << input_blob->data_at(i, j, u, v) << ",";
+             }
+             std::cout << " " << std::endl;
+         }
+     }
+  }
+  std::cout << "output_transform = " << std::endl;
+  for (int i = 0; i < transformed_blob->num(); ++i){
+      for (int j = 0; j < transformed_blob->channels(); ++j) {
+          for (int u = 0; u < transformed_blob->height(); ++u) {
+              for (int v = 0; v < transformed_blob->width(); ++v) {
+                   std::cout << transformed_blob->data_at(i, j, u, v) << ",";
+              }
+              std::cout << " " << std::endl;
+          }
+      }
+   }
+*/
+
 }
 
 template<typename Dtype>
